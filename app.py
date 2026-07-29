@@ -7,11 +7,11 @@ import joblib
 # ---------------- LOAD MODEL ----------------
 
 @st.cache_resource
-def load_model():
-    return joblib.load("flight_price_prediction_model.pkl")
+#def load_model():
+#    return joblib.load("flight_price_prediction_model.pkl")
 
 
-model = load_model()
+#model = load_model()
 
 # ---------------- Preprocessing FUNCTIONS ----------------
 
