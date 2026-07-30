@@ -18,7 +18,7 @@ import os
 @st.cache_resource
 def load_model():
 
-    MODEL_PATH = "flight_price_prediction_model.pkl"
+    MODEL_PATH = "flight_price_prediction_model.joblib"
 
     FILE_ID = "1WuyrQ-X1OFtdfbbHjMNUI2niIINv9aJn"
 
