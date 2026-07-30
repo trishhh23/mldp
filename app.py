@@ -12,18 +12,13 @@ import numpy as np
 import joblib
 import gdown
 import os
-import sklearn
 
-st.write("sklearn:", sklearn.__version__)
-st.write("pandas:", pd.__version__)
-st.write("numpy:", np.__version__)
-st.write("joblib:", joblib.__version__)
 # ---------------- LOAD MODEL ----------------
 
 @st.cache_resource
 def load_model():
-    MODEL_PATH = "flight_price_prediction_model.joblib"
-    FILE_ID = "1WuyrQ-X1OFtdfbbHjMNUI2niIINv9aJn"
+    MODEL_PATH = "flight_price_prediction_model.pkl"
+    FILE_ID = "1PQPcKOoDLhAVPIgKnXd41IBX2sbUjJqC"
 
     URL = f"https://drive.google.com/uc?id={FILE_ID}"
 
