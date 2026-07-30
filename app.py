@@ -12,6 +12,7 @@ import numpy as np
 import joblib
 import gdown
 import os
+import sklearn
 
 st.write("sklearn:", sklearn.__version__)
 st.write("pandas:", pd.__version__)
