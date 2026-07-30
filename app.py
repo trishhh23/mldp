@@ -38,9 +38,10 @@ def load_model():
     st.write("Model loaded successfully!")
 
     return model
-
+st.write(f"Model file size: {os.path.getsize(MODEL_PATH)/(1024*1024):.2f} MB")
+st.write("About to load model...")
 model = load_model()
-
+st.write("Model loaded successfully!")
 
 # ---------------- Preprocessing FUNCTIONS ----------------
 
