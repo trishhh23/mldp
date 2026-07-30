@@ -13,6 +13,10 @@ import joblib
 import gdown
 import os
 
+st.write("sklearn:", sklearn.__version__)
+st.write("pandas:", pd.__version__)
+st.write("numpy:", np.__version__)
+st.write("joblib:", joblib.__version__)
 # ---------------- LOAD MODEL ----------------
 
 @st.cache_resource
