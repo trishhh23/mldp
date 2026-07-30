@@ -17,18 +17,22 @@ import os
 
 @st.cache_resource
 def load_model():
-
     MODEL_PATH = "flight_price_prediction_model.joblib"
-
     FILE_ID = "1WuyrQ-X1OFtdfbbHjMNUI2niIINv9aJn"
 
     URL = f"https://drive.google.com/uc?id={FILE_ID}"
 
     if not os.path.exists(MODEL_PATH):
-        st.info("Downloading model for the first time...")
+        st.write("Downloading model...")
         gdown.download(URL, MODEL_PATH, quiet=False)
 
-    return joblib.load(MODEL_PATH)
+    st.write(f"Downloaded file size: {os.path.getsize(MODEL_PATH) / (1024*1024):.2f} MB")
+
+    model = joblib.load(MODEL_PATH)
+
+    st.write("Model loaded successfully!")
+
+    return model
 
 model = load_model()
 
