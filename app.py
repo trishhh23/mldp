@@ -28,7 +28,12 @@ def load_model():
 
     st.write(f"Downloaded file size: {os.path.getsize(MODEL_PATH) / (1024*1024):.2f} MB")
 
-    model = joblib.load(MODEL_PATH)
+    try:
+        model = joblib.load(MODEL_PATH)
+        st.success("Model loaded successfully!")
+    except Exception as e:
+        st.error(f"Error loading model: {type(e).__name__}: {e}")
+        st.stop()
 
     st.write("Model loaded successfully!")
 
