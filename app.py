@@ -1,17 +1,29 @@
 import streamlit as st
-from PIL import Image
 import pandas as pd
 import numpy as np
 import joblib
+import gdown
+import os
 
 # ---------------- LOAD MODEL ----------------
 
 @st.cache_resource
-#def load_model():
-#    return joblib.load("flight_price_prediction_model.pkl")
+def load_model():
 
+    MODEL_PATH = "flight_price_prediction_model.pkl"
 
-#model = load_model()
+    FILE_ID = "1wcGVfhKttO80Fz9voW48GCMWt1LMVsQV"
+
+    URL = f"https://drive.google.com/uc?id={FILE_ID}"
+
+    if not os.path.exists(MODEL_PATH):
+        st.info("Downloading model for the first time...")
+        gdown.download(URL, MODEL_PATH, quiet=False)
+
+    return joblib.load(MODEL_PATH)
+
+model = load_model()
+
 
 # ---------------- Preprocessing FUNCTIONS ----------------
 
@@ -58,7 +70,7 @@ def cyclic_hour(hour):
 # ------- Clear previous prediction whenever inputs change--------------
 def clear_prediction():
     st.session_state.prediction = None
-    st.session_state.prediction_status = "Waiting"
+    st.session_state.prediction_status = "🟡 Waiting"
     st.session_state.prediction_made = False
 
 def predict_price(
@@ -252,13 +264,20 @@ if "prediction" not in st.session_state:
     st.session_state.prediction = None
 
 if "prediction_status" not in st.session_state:
-    st.session_state.prediction_status = "Waiting"
+    st.session_state.prediction_status = "🟡 Waiting"
 
 if "prediction_made" not in st.session_state:
     st.session_state.prediction_made = False
 
 if "model_name" not in st.session_state:
     st.session_state.model_name = "Random Forest"
+#------ Header---------------
+
+with st.container(border=True):
+
+    st.subheader("✈️ Flight Price Prediction System")
+    st.caption("Predict airline ticket prices using Machine Learning")
+
 
 # ---------------- MAIN CONTENT ----------------
 
@@ -268,7 +287,7 @@ with left_col:
 
     #flight_data = show_input_form()
 
-    st.subheader("✈️ Flight Information")
+    st.subheader("Flight Information")
     col1, col2 = st.columns(2)
     
         # ---------- LEFT COLUMN ----------
@@ -333,7 +352,7 @@ with left_col:
     
             duration = st.number_input(
                 "Flight Duration (minutes)",
-                min_value=120,
+                min_value=30,
                 step=1,
                 on_change=clear_prediction
             )
@@ -350,7 +369,7 @@ with left_col:
         """, unsafe_allow_html=True)
     
     predict = st.button(
-            "🔮 Predict Flight Price",
+            "Predict Flight Price",
             use_container_width=True
         )
 
@@ -363,11 +382,21 @@ if predict:
   if departure_city == destination_city:
 
         st.session_state.prediction = None
-        st.session_state.prediction_status = "Invalid Input"
+        st.session_state.prediction_status = "❌ Invalid Input"
         st.session_state.prediction_made = False
 
         st.error("Departure City and Destination City cannot be the same.")
 
+  elif departure_time == arrival_time:
+
+    st.session_state.prediction = None
+    st.session_state.prediction_status = "❌ Invalid Input"
+    st.session_state.prediction_made = False
+
+    st.error(
+        "Departure Time and Arrival Time cannot be the same. "
+        "Please enter a valid flight schedule."
+    )
   else:
 
     try:
@@ -386,13 +415,13 @@ if predict:
         )
 
         st.session_state.prediction = price
-        st.session_state.prediction_status = "Completed"
+        st.session_state.prediction_status = "✅ Completed"
         st.session_state.prediction_made = True
 
     except Exception as e:
 
         st.session_state.prediction = None
-        st.session_state.prediction_status = "Prediction Failed"
+        st.session_state.prediction_status = "⚠️ Prediction Failed"
         st.session_state.prediction_made = False
 
         st.error(f"Prediction failed: {e}")
@@ -414,6 +443,12 @@ with right_col:
                 f"<h2 style='margin-top:0'>{predicted_price}</h2>",
                 unsafe_allow_html=True
             )
+        # Display only after a successful prediction
+            if st.session_state.prediction_made:
+                st.caption(
+                "This is the predicted airfare based on the selected flight details and using the trained Random Forest regression model."
+            )
+
     
             st.divider()
     
@@ -433,7 +468,7 @@ model_info = pd.DataFrame({
         "RMSE": ["2481.06"]
         })
 
-st.table(model_info)
+st.table(model_info.style.hide(axis="index"))
 
 # ---------------- FOOTER ----------------
 st.markdown(
