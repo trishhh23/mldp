@@ -20,9 +20,13 @@ def load_model():
         st.info("Downloading model for the first time...")
         gdown.download(URL, MODEL_PATH, quiet=False)
 
-    return joblib.load(MODEL_PATH)
+    try:
+        return joblib.load(MODEL_PATH)
+    except Exception as e:
+        st.error(f"Unable to load model: {e}")
+        st.stop()
 
-model = load_model()
+#model = load_model()
 
 
 # ---------------- Preprocessing FUNCTIONS ----------------
@@ -74,6 +78,7 @@ def clear_prediction():
     st.session_state.prediction_made = False
 
 def predict_price(
+    model,    
     airline,
     departure_city,
     destination_city,
@@ -400,8 +405,14 @@ if predict:
   else:
 
     try:
+        if "model" not in st.session_state:
+                with st.spinner("Loading machine learning model. This may take some time..."):
+                    st.session_state.model = load_model()
+
+        model = st.session_state.model
 
         price = predict_price(
+            model=model,
             airline=airline,
             departure_city=departure_city,
             destination_city=destination_city,
