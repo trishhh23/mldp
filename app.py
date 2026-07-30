@@ -26,15 +26,30 @@ def load_model():
         st.write("Downloading model...")
         gdown.download(URL, MODEL_PATH, quiet=False)
 
-    st.write(f"Model file size: {os.path.getsize(MODEL_PATH)/(1024*1024):.2f} MB")
-    st.write("About to load model...")
+    try:
+        st.write(f"Model file size: {os.path.getsize(MODEL_PATH)/(1024*1024):.2f} MB")
+        st.write("About to load model...")
 
-    # Don't load the model yet
-    return None
+       # model = joblib.load(MODEL_PATH)
+        import gc
+
+        st.write("Loading model...")
+        gc.collect()
+
+        model = joblib.load(MODEL_PATH)
+
+        st.success("Model loaded!")
+
+        st.success("Model loaded successfully!")
+
+    except Exception as e:
+        st.error(f"Error loading model: {type(e).__name__}: {e}")
+        st.stop()
+
+    return model
 
 
-st.success("App started successfully!")
-
+# Call the function OUTSIDE the function definition
 model = load_model()
 
 # ---------------- Preprocessing FUNCTIONS ----------------
