@@ -1,4 +1,12 @@
 import streamlit as st
+
+# ---------------- PAGE CONFIG ----------------
+st.set_page_config(
+    page_title="Flight Price Prediction System",
+    page_icon="✈️",
+    layout="wide"
+)
+#-----------------
 import pandas as pd
 import numpy as np
 import joblib
@@ -12,7 +20,7 @@ def load_model():
 
     MODEL_PATH = "flight_price_prediction_model.pkl"
 
-    FILE_ID = "1wcGVfhKttO80Fz9voW48GCMWt1LMVsQV"
+    FILE_ID = "1WuyrQ-X1OFtdfbbHjMNUI2niIINv9aJn"
 
     URL = f"https://drive.google.com/uc?id={FILE_ID}"
 
@@ -20,13 +28,9 @@ def load_model():
         st.info("Downloading model for the first time...")
         gdown.download(URL, MODEL_PATH, quiet=False)
 
-    try:
-        return joblib.load(MODEL_PATH)
-    except Exception as e:
-        st.error(f"Unable to load model: {e}")
-        st.stop()
+    return joblib.load(MODEL_PATH)
 
-#model = load_model()
+model = load_model()
 
 
 # ---------------- Preprocessing FUNCTIONS ----------------
@@ -77,8 +81,7 @@ def clear_prediction():
     st.session_state.prediction_status = "🟡 Waiting"
     st.session_state.prediction_made = False
 
-def predict_price(
-    model,    
+def predict_price( 
     airline,
     departure_city,
     destination_city,
@@ -210,13 +213,6 @@ def predict_price(
     return round(prediction, 2)
 
 
-
-# ---------------- PAGE CONFIG ----------------
-st.set_page_config(
-    page_title="Flight Price Prediction System",
-    page_icon="✈️",
-    layout="wide"
-)
 
 #-----------------Dropdowns values--------------------
 AIRLINES = [
@@ -384,7 +380,7 @@ with left_col:
 
 if predict:
 
-  if departure_city == destination_city:
+    if departure_city == destination_city:
 
         st.session_state.prediction = None
         st.session_state.prediction_status = "❌ Invalid Input"
@@ -392,50 +388,45 @@ if predict:
 
         st.error("Departure City and Destination City cannot be the same.")
 
-  elif departure_time == arrival_time:
-
-    st.session_state.prediction = None
-    st.session_state.prediction_status = "❌ Invalid Input"
-    st.session_state.prediction_made = False
-
-    st.error(
-        "Departure Time and Arrival Time cannot be the same. "
-        "Please enter a valid flight schedule."
-    )
-  else:
-
-    try:
-        if "model" not in st.session_state:
-                with st.spinner("Loading machine learning model. This may take some time..."):
-                    st.session_state.model = load_model()
-
-        model = st.session_state.model
-
-        price = predict_price(
-            model=model,
-            airline=airline,
-            departure_city=departure_city,
-            destination_city=destination_city,
-            month_category=month_category,
-            day=day,
-            travel_class=travel_class,
-            stops=stops,
-            departure_time=departure_time,
-            arrival_time=arrival_time,
-            duration=duration,
-        )
-
-        st.session_state.prediction = price
-        st.session_state.prediction_status = "✅ Completed"
-        st.session_state.prediction_made = True
-
-    except Exception as e:
+    elif departure_time == arrival_time:
 
         st.session_state.prediction = None
-        st.session_state.prediction_status = "⚠️ Prediction Failed"
+        st.session_state.prediction_status = "❌ Invalid Input"
         st.session_state.prediction_made = False
 
-        st.error(f"Prediction failed: {e}")
+        st.error(
+            "Departure Time and Arrival Time cannot be the same. "
+            "Please enter a valid flight schedule."
+        )
+
+    else:
+
+        try:
+
+            price = predict_price(
+                airline=airline,
+                departure_city=departure_city,
+                destination_city=destination_city,
+                month_category=month_category,
+                day=day,
+                travel_class=travel_class,
+                stops=stops,
+                departure_time=departure_time,
+                arrival_time=arrival_time,
+                duration=duration,
+            )
+
+            st.session_state.prediction = price
+            st.session_state.prediction_status = "✅ Completed"
+            st.session_state.prediction_made = True
+
+        except Exception as e:
+
+            st.session_state.prediction = None
+            st.session_state.prediction_status = "⚠️ Prediction Failed"
+            st.session_state.prediction_made = False
+
+            st.error(f"Prediction failed: {e}")
 
 # ---------------- PREDICTION CARD ----------------
 
