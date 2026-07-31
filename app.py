@@ -18,7 +18,9 @@ import os
 @st.cache_resource
 def load_model():
     MODEL_PATH = "flight_price_prediction_model.pkl"
-    FILE_ID = "1bBW5tmh4SDyo255cWyzPv-ZRxnhn8jPB"
+    #FILE_ID = "1bBW5tmh4SDyo255cWyzPv-ZRxnhn8jPB" 
+    #commented at 9.33am 31st july
+    FILE_ID ="1mykKGcRz_QdaHUaXeyQ0vdyWn_D44ggP"
 
     URL = f"https://drive.google.com/uc?id={FILE_ID}"
 
