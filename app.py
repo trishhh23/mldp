@@ -227,7 +227,12 @@ def predict_price(
     input_data["arr_hour_cos"] = arr_cos
 
     # ---------------- PREDICT ----------------
+    # added
+    st.write("Model expects", len(model.feature_names_in_), "features")
 
+    st.write("Features sent to model:")
+    st.dataframe(input_data.loc[:, (input_data != 0).any(axis=0)].T)
+    #endss here
     prediction = model.predict(input_data)[0]
    # print(input_data.loc[:, (input_data != 0).any(axis=0)].T)
     #st.write(input_data.loc[:, (input_data != 0).any(axis=0)].T)
