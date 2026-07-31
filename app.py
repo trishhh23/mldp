@@ -53,6 +53,13 @@ def load_model():
 
 # Call the function OUTSIDE the function definition
 model = load_model()
+#added
+st.write(type(model))
+st.write(model)
+st.write(model.n_estimators)
+st.write(model.feature_names_in_)
+st.write(input_data.columns[input_data.columns.str.contains("dep_daytime")])
+#end sheer
 
 # ---------------- Preprocessing FUNCTIONS ----------------
 
