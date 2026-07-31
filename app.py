@@ -35,7 +35,7 @@ def load_model():
        # model = joblib.load(MODEL_PATH)
         import gc
 
-        st.write("Loading model...")
+        #st.write("Loading model...")
         gc.collect()
 
         model = joblib.load(MODEL_PATH)
@@ -486,9 +486,10 @@ st.subheader("🤖 Model Information")
 model_info = pd.DataFrame({
         "Algorithm": ["Random Forest Regressor"],
         "Feature Set": ["FS4"],
-        "R² Score": ["0.988005"],
-        "MAE": ["977.31"],
-        "RMSE": ["2481.06"]
+        "R² Score": ["0.988314"],
+        "MAE": ["1008.84"],
+        "RMSE": ["2448.83"],
+        "MSE":["5996782.92"]
         })
 
 st.table(model_info.style.hide(axis="index"))
