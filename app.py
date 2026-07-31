@@ -29,8 +29,8 @@ def load_model():
         gdown.download(URL, MODEL_PATH, quiet=False)
 
     try:
-        st.write(f"Model file size: {os.path.getsize(MODEL_PATH)/(1024*1024):.2f} MB")
-        st.write("About to load model...")
+        #st.write(f"Model file size: {os.path.getsize(MODEL_PATH)/(1024*1024):.2f} MB")
+       # st.write("About to load model...")
 
        # model = joblib.load(MODEL_PATH)
         import gc
@@ -40,7 +40,7 @@ def load_model():
 
         model = joblib.load(MODEL_PATH)
 
-        st.success("Model loaded!")
+        #st.success("Model loaded!")
 
         st.success("Model loaded successfully!")
 
