@@ -25,7 +25,7 @@ def load_model():
     URL = f"https://drive.google.com/uc?id={FILE_ID}"
 
     if not os.path.exists(MODEL_PATH):
-        st.write("Downloading model...")
+        #st.write("Downloading model...")
         gdown.download(URL, MODEL_PATH, quiet=False)
 
     try:
@@ -42,7 +42,7 @@ def load_model():
 
         #st.success("Model loaded!")
 
-        st.success("Model loaded successfully!")
+        #st.success("Model loaded successfully!")
 
     except Exception as e:
         st.error(f"Error loading model: {type(e).__name__}: {e}")
